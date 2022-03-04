@@ -7,7 +7,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
-from PIL import Image
+# from PIL import Image
 from get_data import get_weekly_eth_data, get_current_price
 from cryptoapi import get_prediction, get_backtest
 
@@ -31,10 +31,10 @@ if page_selection == "Home":
         st.markdown(
             "<h1 style='text-align: center; color: black; font-size: 5rem; font-weight: 600'>Cryptoview</h1>",
             unsafe_allow_html=True)
-        col1, col2, col3 = st.columns([0.35, 0.3, 0.35])
-        with col2:
-            image = Image.open(LOGO_IMAGE)
-            st.image(image)
+        # col1, col2, col3 = st.columns([0.35, 0.3, 0.35])
+        # with col2:
+        #     image = Image.open(LOGO_IMAGE)
+        #     st.image(image)
         st.markdown("")
 
     with about:

@@ -164,7 +164,7 @@ oauthlib==3.1.1
 openpyxl==3.0.7
 opt-einsum==3.3.0
 packaging==21.0
-packgenlite @ git+ssh://git@github.com/krokrob/packgenlite@fd55403cad61f87d8272988d011167918f261453
+#packgenlite @ git+ssh://git@github.com/krokrob/packgenlite@fd55403cad61f87d8272988d011167918f261453
 pandas==1.3.2
 pandas-profiling==3.0.0
 pandocfilters==1.4.3

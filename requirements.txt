@@ -251,7 +251,7 @@ strsimpy==0.2.0
 tabulate==0.8.9
 tangled-up-in-unicode==0.1.0
 # Editable Git install with no remote (TaxiFareModel==1.0)
--e /home/marlon/code/marlonmoreira000/TFM_PredictInProd
+#-e /home/marlon/code/marlonmoreira000/TFM_PredictInProd
 tenacity==8.0.1
 tensorboard==2.6.0
 tensorboard-data-server==0.6.1

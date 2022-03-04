@@ -67,5 +67,16 @@ def get_current_price():
 
     return current_price
 
+
+def get_day_interval():
+    # get unix timestamps
+    ts = int(time.time())
+    ts_plus_1d = ts + (1 * 24 * 60 * 60)
+    # convert to english date
+    dt_now = datetime.utcfromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+    dt_now_plus_1d = datetime.utcfromtimestamp(ts_plus_1d).strftime(
+        '%Y-%m-%d %H:%M:%S')
+    return [dt_now, dt_now_plus_1d]
+
 if __name__ == "__main__":
-    print(get_current_price())
+    print(get_day_interval())

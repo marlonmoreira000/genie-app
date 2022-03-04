@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
 from PIL import Image
-from get_data import get_weekly_eth_data, get_current_price
+from get_data import get_weekly_eth_data, get_current_price, get_day_interval
 from cryptoapi import get_prediction, get_backtest
 
 # Constants
@@ -54,42 +54,67 @@ elif page_selection == "Making Predictions":
         st.markdown("""# Making Predictions""")
         st.markdown("")
         st.markdown("""### Ethereum prices this week (USD)""")
+
     with plot:
         prediction_form = st.form(key="prediction_form")
+
         with prediction_form:
-            df = get_weekly_eth_data()
-            fig = px.line(df,
-                          x='datetime',
-                          y=['eth_price_usd'],
-                          color_discrete_map={
-                              "eth_price_usd": "#4e79a7"
-                          })
-            fig.update_xaxes(visible=True)
-            fig.update_layout(
-                legend=dict(yanchor="bottom",
-                            y=-0.3, xanchor="left",
-                            x=0.80))
-            st.plotly_chart(fig, use_container_width=True)
-
-            # get current ethereum price
-            current_price = get_current_price()
-            # plot current ethereum price
-            with output1:
-                st.info(
-                    f'The current Ethereum price is **${current_price}** (USD)')
-
             # plot update plot to show prediction
             submitted = st.form_submit_button("Predict")
+            # get weekly ethereum data
+            df = get_weekly_eth_data()
+
             if submitted:
                 # make prediction
-                prediction = 100*get_prediction()
-                # TODO: update plot with new prediction
+                prediction = 100 * get_prediction()
+                current_price = get_current_price()
+                expected_price = round(
+                    ((prediction + 100) / 100) * current_price)
+
+                fig = px.line(df,
+                              x='datetime',
+                              y=['eth_price_usd'],
+                              color_discrete_map={"eth_price_usd": "#4e79a7"})
+                if prediction > 0:
+                    fig.add_traces(
+                        list(
+                            px.line(x=get_day_interval(),
+                                    y=[current_price, expected_price],
+                                    color_discrete_sequence=['#38d93e'],
+                                    line_dash_sequence=['dash']).select_traces()))
+                elif prediction < 0:
+                    fig.add_traces(
+                        list(
+                            px.line(x=get_day_interval(),
+                                    y=[current_price, expected_price],
+                                    color_discrete_sequence=['#e63939'],
+                                    line_dash_sequence=['dash'
+                                                        ]).select_traces()))
+                else:
+                    fig.add_traces(
+                        list(
+                            px.line(x=get_day_interval(),
+                                    y=[current_price, expected_price],
+                                    color_discrete_sequence=['blue'],
+                                    line_dash_sequence=['dash'
+                                                        ]).select_traces()))
+
+                fig.update_xaxes(visible=True)
+                fig.update_layout(legend=dict(
+                    yanchor="bottom", y=-0.3, xanchor="left", x=0.80))
+                st.plotly_chart(fig, use_container_width=True)
+
+                # plot current ethereum price
+                with output1:
+                    st.info(
+                        f'The current Ethereum price is **${current_price}** (USD)'
+                    )
+
                 if prediction > 0:
                     with output2:
                         st.success(
                             f'Ethereum price is expected to be **${round(((prediction + 100)/100)*current_price)}** tomorrow, an increase of **{round(prediction,2)}%**.'
                         )
-                        st.balloons()
                 elif prediction < 0:
                     with output2:
                         st.error(
@@ -97,7 +122,33 @@ elif page_selection == "Making Predictions":
                         )
                 else:
                     with output2:
-                        st.info('Ethereum price is expected to remain stable tomorrow.')
+                        st.info(
+                            'Ethereum price is expected to remain stable tomorrow.'
+                        )
+
+            else:
+                fig = px.line(df,
+                            x='datetime',
+                            y=['eth_price_usd'],
+                            color_discrete_map={
+                                "eth_price_usd": "#4e79a7"
+                            })
+
+                fig.update_xaxes(visible=True)
+                fig.update_layout(
+                    legend=dict(yanchor="bottom",
+                                y=-0.3, xanchor="left",
+                                x=0.80))
+                st.plotly_chart(fig, use_container_width=True)
+
+                # get current ethereum price
+                current_price = get_current_price()
+                # plot current ethereum price
+                with output1:
+                    st.info(
+                        f'The current Ethereum price is **${current_price}** (USD)')
+
+
 
 elif page_selection == "Past Performance":
     title = st.container()
@@ -113,11 +164,57 @@ elif page_selection == "Past Performance":
         with input_form:
             amount = st.number_input('Enter an amount (USD)', 0, 1000000)
             deposit_date = st.date_input('Deposit date')
+            trading_strategy = st.selectbox('Trading Strategy',
+                                  ('Buy and Hold', 'Cryptoview Algorithm'))
             st.markdown("")
-            check_performance = st.form_submit_button("Check Performance")
-            # backtest_data = get_backtest(amount, deposit_date)
+            see_performance = st.form_submit_button("See Performance")
 
-            if check_performance == True:
+            if see_performance == True and trading_strategy == 'Buy and Hold':
+                backtest_data = get_backtest(amount, deposit_date)
+                fig = px.line(backtest_data,
+                              x='date',
+                              y=['buy-and-hold'],
+                              color_discrete_map={
+                                  "buy-and-hold": "#4e79a7"
+                              })
+                fig.update_xaxes(visible=True,
+                    rangeselector=dict(buttons=list([
+                        dict(count=1, label="1m", step="month", stepmode="backward"),
+                        dict(count=6, label="6m", step="month", stepmode="backward"),
+                        dict(count=1, label="YTD", step="year", stepmode="todate"),
+                        dict(count=1, label="1y", step="year", stepmode="backward"),
+                        dict(step="all")
+                    ])))
+                fig.update_layout(legend=dict(
+                    yanchor="bottom",
+                    y=-0.3,
+                    xanchor="left",
+                    x=0.80
+                ))
+                st.plotly_chart(fig, use_container_width=True)
+
+                # get final values for both time series
+                bah_final_amount = int(backtest_data.iloc[-1, :]['buy-and-hold'])
+                # get % difference = strat / bah
+                pct_diff_bah = round(((bah_final_amount-amount)/amount)*100, 1)
+
+                if pct_diff_bah > 0:
+                    with output:
+                        st.success(
+                            f'If you made this investment, you would now have **${bah_final_amount}**, an increase of **{pct_diff_bah}%**'
+                        )
+                elif pct_diff_bah < 0:
+                    with output:
+                        st.error(
+                            f'If you made this investment, you would now have **${bah_final_amount}**, a decrease of **{pct_diff_bah}%**'
+                        )
+                else:
+                    with output:
+                        st.info(
+                            'No change.'
+                        )
+
+            if see_performance == True and trading_strategy == 'Cryptoview Algorithm':
                 backtest_data = get_backtest(amount, deposit_date)
                 fig = px.line(backtest_data,
                               x='date',
@@ -151,13 +248,13 @@ elif page_selection == "Past Performance":
                 if pct_diff > 0:
                     with output:
                         st.success(
-                            f'Congratulations, you now have **${int(strategy_final_amount)}**, an increase of **{round(((strategy_final_amount - amount)/amount)*100, 1)}%** using our strategy!'
+                            f'Using the Cryptoview algorithm, you would now have **${int(strategy_final_amount)}**, beating the market by **{round(pct_diff/100, 1)}** times!'
                         )
                         st.balloons()
                 elif pct_diff < 0:
                     with output:
                         st.error(
-                            f'Unfortunately, you now have **${int(strategy_final_amount)}**, a loss of **{round(((strategy_final_amount - amount)/amount)*100, 1)}%**'
+                            f'Using the Cryptoview algorithm, you would now have **${int(strategy_final_amount)}**, losing to the market by **{round(pct_diff/100, 1)}** times.'
                         )
                 else:
                     with output:

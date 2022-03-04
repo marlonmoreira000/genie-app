@@ -7,7 +7,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
-# from PIL import Image
+from PIL import Image
 from get_data import get_weekly_eth_data, get_current_price
 from cryptoapi import get_prediction, get_backtest
 
@@ -31,10 +31,10 @@ if page_selection == "Home":
         st.markdown(
             "<h1 style='text-align: center; color: black; font-size: 5rem; font-weight: 600'>Cryptoview</h1>",
             unsafe_allow_html=True)
-        # col1, col2, col3 = st.columns([0.35, 0.3, 0.35])
-        # with col2:
-        #     image = Image.open(LOGO_IMAGE)
-        #     st.image(image)
+        col1, col2, col3 = st.columns([0.35, 0.3, 0.35])
+        with col2:
+            image = Image.open(LOGO_IMAGE)
+            st.image(image)
         st.markdown("")
 
     with about:
@@ -151,13 +151,13 @@ elif page_selection == "Past Performance":
                 if pct_diff > 0:
                     with output:
                         st.success(
-                            f'Congratulations, you now have **${int(strategy_final_amount)}**, an increase of **{pct_diff}%** using our strategy!'
+                            f'Congratulations, you now have **${int(strategy_final_amount)}**, an increase of **{round(((strategy_final_amount - amount)/amount)*100, 1)}%** using our strategy!'
                         )
                         st.balloons()
                 elif pct_diff < 0:
                     with output:
                         st.error(
-                            f'Unfortunately, you lost **{pct_diff}%** using our strategy'
+                            f'Unfortunately, you now have **${int(strategy_final_amount)}**, a loss of **{round(((strategy_final_amount - amount)/amount)*100, 1)}%**'
                         )
                 else:
                     with output:

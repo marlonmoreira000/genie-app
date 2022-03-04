@@ -145,7 +145,7 @@ missingno==0.4.2
 mistune==0.8.4
 mlflow==1.22.0
 # Editable Git install with no remote (mlproject==1.0)
--e /home/marlon/code/marlonmoreira000/mlproject
+#-e /home/marlon/code/marlonmoreira000/mlproject
 multidict==5.2.0
 multimethod==1.4
 murmurhash==1.0.6

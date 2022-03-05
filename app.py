@@ -261,20 +261,4 @@ elif page_selection == "Past Performance":
                         st.info(
                             'No change.'
                         )
-
-
-
-# if conditions on % diff
-
-# with output:
-#     st.write("HELLO")
-# output message based on prediction
-# if prediction > 0:
-#     st.success('Ethereum is expected to increase by ... in the next hour.')
-#     st.balloons()
-# elif prediction < 0:
-#     st.error('Ethereum is expected to decrease by ... in the next hour.')
-# else:
-#     st.info('Ethereum is expected to remain stable in the next hour.')
-# st.success('By investing with CryptoBot, you earnt an extra **$2780!**')
-# st.balloons()
+            # TABLE

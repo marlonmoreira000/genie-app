@@ -10,13 +10,13 @@ Remote repository: https://github.com/marlonmoreira000/genie-app`
 
 ## Description
 
-...
+This is a streamlit app that we created at Le Wagon Data Science Bootcamp. First we created an API, then put it in a Docker container and hoted it on Google Cloud. This API contains a Deep Learning Model (LSTM RNN) which is used to predict Ethereum price 24h in advance. It also contained a separate algorithmic-trading strategy which we can backtest in the app.
 
 ---
 
 ## Purpose
 
-...
+The purpose of this project was to create something fun using some of the technologies we have used in the bootcamp, namely Docker, Cloud hosting, ML/Deep Learning, creating APIs etc.
 
 ---
 
@@ -24,8 +24,14 @@ Remote repository: https://github.com/marlonmoreira000/genie-app`
 
 The main features for this app are:
 
-- ?
-- ?
+- Ethereum Price Prediction (24h in advance)
+- Backtesting our algorithmic trading strategy
+
+---
+
+## App architecture
+
+...
 
 ---
 
@@ -37,7 +43,7 @@ The main features for this app are:
 
 ## Target Audience
 
-...
+The target audience for this app is anyone is interested in crypto markets and wants to predict Ethereum prices to get an advantage in the market. Also anyone who wants to see the performance of our trading algorithm relative to the market.
 
 ---
 

@@ -31,7 +31,7 @@ The main features for this app are:
 
 ## App architecture
 
-![genie-architecture](./images.genie-architecture)
+![genie-architecture](./images/genie-architecture.png)
 
 ---
 

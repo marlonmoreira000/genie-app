@@ -37,7 +37,13 @@ The main features for this app are:
 
 ## Screenshots
 
-...
+### 1. Price prediction
+
+![prediction-screenshot](./images/prediction-screenshot.png)
+
+### 2. Backtesting
+
+![backtest-screenshot](./images/backtest-screenshot.png)
 
 ---
 

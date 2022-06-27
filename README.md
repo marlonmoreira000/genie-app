@@ -5,7 +5,7 @@
 ## Links
 
 - [Demo video](https://www.linkedin.com/posts/marlonmoreira_university-vs-coding-bootcamp-i-made-the-activity-6915502948307390464-0UEz?utm_source=linkedin_share&utm_medium=member_desktop_web)
-- [Remote repository](https://github.com/marlonmoreira000/genie-app)
+- [Source code](https://github.com/marlonmoreira000/genie-app)
 
 ---
 
